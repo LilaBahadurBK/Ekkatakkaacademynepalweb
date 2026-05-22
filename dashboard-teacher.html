@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Teacher Dashboard — EkkaTakka Academy</title>
+<link rel="stylesheet" href="style.css"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+<style>
+body{background:var(--cream)}
+.tdash-layout{display:flex;min-height:100vh;padding-top:68px}
+.tdash-sidebar{width:230px;background:linear-gradient(180deg,var(--navy-dark),var(--navy-mid));position:fixed;top:68px;bottom:0;left:0;overflow-y:auto;padding:20px 12px;z-index:100;display:flex;flex-direction:column}
+.tdash-main{margin-left:230px;flex:1;padding:32px}
+.tprofile-mini{text-align:center;padding:16px;margin-bottom:16px}
+.tprofile-avatar{width:72px;height:72px;border-radius:50%;background:rgba(255,255,255,.15);border:3px solid rgba(232,125,42,.5);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:700;color:var(--white);margin:0 auto 10px}
+.tprofile-mini strong{display:block;font-size:.9rem;color:var(--white)}
+.tprofile-mini span{font-size:.72rem;color:rgba(255,255,255,.5)}
+.tprofile-status{display:inline-flex;align-items:center;gap:6px;background:rgba(16,185,129,.15);border:1px solid rgba(16,185,129,.3);color:#34d399;font-size:.72rem;font-weight:600;padding:4px 12px;border-radius:100px;margin-top:8px;cursor:pointer}
+.tnav-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:var(--radius-sm);color:rgba(255,255,255,.65);font-size:.88rem;font-weight:500;cursor:pointer;transition:var(--transition);margin-bottom:2px;border:none;background:none;width:100%;text-align:left}
+.tnav-item:hover{background:rgba(255,255,255,.1);color:var(--white)}
+.tnav-item.active{background:var(--orange);color:var(--white)}
+.tnav-item i{width:18px;text-align:center;font-size:.9rem}
+.tnav-section{font-size:.62rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.3);padding:4px 12px;margin:12px 0 6px}
+.tdash-section{display:none}.tdash-section.active{display:block}
+.tdash-topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px;flex-wrap:wrap;gap:12px}
+.tdash-topbar h2{font-family:'Playfair Display',serif;font-size:1.6rem;color:var(--navy-dark)}
+.earn-cards{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
+.earn-card{border-radius:var(--radius);padding:22px;color:var(--white)}
+.earn-card.e1{background:linear-gradient(135deg,var(--orange),#f97316)}
+.earn-card.e2{background:linear-gradient(135deg,var(--navy-dark),var(--navy))}
+.earn-card.e3{background:linear-gradient(135deg,var(--success),#059669)}
+.earn-card.e4{background:linear-gradient(135deg,#7c3aed,#6d28d9)}
+.earn-card-label{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;opacity:.7;margin-bottom:8px}
+.earn-card-val{font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;line-height:1}
+.earn-card-sub{font-size:.75rem;opacity:.65;margin-top:4px}
+.tpanel{background:var(--white);border-radius:var(--radius-lg);box-shadow:var(--shadow-xs);overflow:hidden;margin-bottom:20px}
+.tpanel-header{padding:18px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.tpanel-title{font-size:.95rem;font-weight:700;color:var(--navy);display:flex;align-items:center;gap:8px}
+.tpanel-title i{color:var(--orange)}
+.tpanel-body{padding:24px}
+.request-card{display:flex;align-items:center;gap:16px;padding:16px;border:1.5px solid var(--border);border-radius:var(--radius);margin-bottom:12px;transition:var(--transition)}
+.request-card:hover{border-color:var(--orange);box-shadow:var(--shadow-sm)}
+.req-avatar{width:48px;height:48px;border-radius:50%;background:var(--cream2);display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--navy);flex-shrink:0;font-size:1rem}
+.availability-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;margin-bottom:20px}
+.day-toggle{padding:12px 6px;border:1.5px solid var(--border);border-radius:var(--radius-sm);text-align:center;cursor:pointer;transition:var(--transition);font-size:.82rem;font-weight:600;color:var(--text-mid);background:var(--cream)}
+.day-toggle.on{background:var(--navy);border-color:var(--navy);color:var(--white)}
+.area-chip{display:inline-flex;align-items:center;gap:6px;background:var(--cream);border:1.5px solid var(--border);border-radius:100px;padding:6px 14px;font-size:.82rem;font-weight:500;color:var(--navy);margin:4px}
+.area-chip button{background:none;border:none;color:var(--text-light);cursor:pointer;font-size:.75rem;padding:0;display:flex;align-items:center}
+.area-chip button:hover{color:#991b1b}
+.rating-summary{display:flex;align-items:center;gap:24px}
+.big-rating{font-family:'Playfair Display',serif;font-size:3.5rem;font-weight:700;color:var(--navy)}
+.rating-bars{flex:1}
+.rating-bar-row{display:flex;align-items:center;gap:10px;margin-bottom:6px;font-size:.78rem;color:var(--text-mid)}
+.rating-bar-fill{flex:1;height:6px;background:var(--border);border-radius:3px;overflow:hidden}
+.rating-bar-fill div{height:100%;background:var(--warning);border-radius:3px}
+@media(max-width:1024px){.tdash-sidebar{width:64px}.tprofile-mini,.tnav-section,.tnav-item span{display:none}.tdash-main{margin-left:64px}}
+@media(max-width:768px){.tdash-sidebar{display:none}.tdash-main{margin-left:0;padding:20px}.earn-cards{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<nav class="navbar" id="navbar">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo"><img src="logo.png" alt=""/><span class="nav-logo-text">EkkaTakka Academy</span></a>
+    <div class="nav-actions" style="margin-left:auto">
+      <a href="find-teachers.html" class="btn btn-ghost btn-sm">View Site</a>
+      <a href="index.html" class="btn btn-primary btn-sm"><i class="fas fa-sign-out-alt"></i> Logout</a>
+    </div>
+  </div>
+</nav>
+
+<div class="tdash-layout">
+  <aside class="tdash-sidebar">
+    <div class="tprofile-mini">
+      <div class="tprofile-avatar" id="tdAvatar">SA</div>
+      <strong id="tdName">Sushila Adhikari</strong>
+      <span id="tdSubjects">Mathematics, Physics</span>
+      <div class="tprofile-status" onclick="toggleOnline()"><span id="statusDot" style="width:8px;height:8px;border-radius:50%;background:#34d399;display:inline-block"></span><span id="statusText">Online</span></div>
+    </div>
+    <button class="tnav-item active" onclick="showTSection('overview')"><i class="fas fa-tachometer-alt"></i><span>Overview</span></button>
+    <button class="tnav-item" onclick="showTSection('requests')"><i class="fas fa-bell"></i><span>Booking Requests</span> <span style="background:var(--orange);color:var(--white);border-radius:100px;padding:1px 7px;font-size:.68rem;margin-left:auto">4</span></button>
+    <button class="tnav-item" onclick="showTSection('students')"><i class="fas fa-users"></i><span>My Students</span></button>
+    <button class="tnav-item" onclick="showTSection('schedule')"><i class="fas fa-calendar-alt"></i><span>Schedule</span></button>
+    <div class="tnav-section">Profile</div>
+    <button class="tnav-item" onclick="showTSection('profile')"><i class="fas fa-user-edit"></i><span>Edit Profile</span></button>
+    <button class="tnav-item" onclick="showTSection('areas')"><i class="fas fa-map-marker-alt"></i><span>Teaching Areas</span></button>
+    <button class="tnav-item" onclick="showTSection('availability')"><i class="fas fa-clock"></i><span>Availability</span></button>
+    <div class="tnav-section">Finance</div>
+    <button class="tnav-item" onclick="showTSection('earnings')"><i class="fas fa-rupee-sign"></i><span>Earnings</span></button>
+    <button class="tnav-item" onclick="showTSection('reviews')"><i class="fas fa-star"></i><span>Reviews</span></button>
+    <button class="tnav-item" onclick="showTSection('documents')"><i class="fas fa-file-alt"></i><span>Documents</span></button>
+    <div style="flex:1"></div>
+    <button class="tnav-item" onclick="window.location='index.html'" style="margin-top:auto"><i class="fas fa-sign-out-alt"></i><span>Logout</span></button>
+  </aside>
+
+  <main class="tdash-main">
+
+    <!-- OVERVIEW -->
+    <div class="tdash-section active" id="ts-overview">
+      <div class="tdash-topbar">
+        <div><h2>Welcome back, Sushila! 👩‍🏫</h2><p style="color:var(--text-light);font-size:.88rem">Your teaching dashboard</p></div>
+        <button class="btn btn-primary btn-sm" onclick="showTSection('profile')"><i class="fas fa-edit"></i> Edit Profile</button>
+      </div>
+      <div class="earn-cards">
+        <div class="earn-card e1"><div class="earn-card-label">This Month</div><div class="earn-card-val">NPR 18,000</div><div class="earn-card-sub">4 students × NPR 4,500</div></div>
+        <div class="earn-card e2"><div class="earn-card-label">Total Earned</div><div class="earn-card-val">NPR 1.2L</div><div class="earn-card-sub">Since January 2025</div></div>
+        <div class="earn-card e3"><div class="earn-card-label">Active Students</div><div class="earn-card-val">4</div><div class="earn-card-sub">2 home + 2 online</div></div>
+        <div class="earn-card e4"><div class="earn-card-label">Avg Rating</div><div class="earn-card-val">4.9 ★</div><div class="earn-card-sub">From 47 reviews</div></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1.5fr 1fr;gap:20px">
+        <div class="tpanel">
+          <div class="tpanel-header"><div class="tpanel-title"><i class="fas fa-calendar"></i> Today's Schedule</div><span style="font-size:.78rem;color:var(--text-light)">Thu, 22 May 2025</span></div>
+          <div class="tpanel-body" style="display:flex;flex-direction:column;gap:10px">
+            <div style="display:flex;align-items:center;gap:14px;padding:14px;background:linear-gradient(135deg,var(--navy-dark),var(--navy));border-radius:var(--radius-sm);color:var(--white)">
+              <div style="text-align:center;min-width:48px"><div style="font-size:.65rem;opacity:.6">NOW</div><div style="font-size:1.2rem;font-weight:700">6AM</div></div>
+              <div style="flex:1"><strong>Ramesh Gautam</strong><div style="font-size:.78rem;opacity:.65">Mathematics · Grade 9-SEE · Home</div></div>
+              <span style="background:var(--success);color:var(--white);padding:3px 10px;border-radius:100px;font-size:.7rem;font-weight:700">Live</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:14px;padding:14px;background:var(--cream);border-radius:var(--radius-sm)">
+              <div style="text-align:center;min-width:48px;color:var(--text-light)"><div style="font-size:.65rem">NEXT</div><div style="font-size:1.2rem;font-weight:700;color:var(--navy)">4PM</div></div>
+              <div style="flex:1"><strong style="color:var(--navy)">Sita Magar</strong><div style="font-size:.78rem;color:var(--text-light)">Statistics · +2 · Online</div></div>
+            </div>
+            <div style="display:flex;align-items:center;gap:14px;padding:14px;background:var(--cream);border-radius:var(--radius-sm)">
+              <div style="text-align:center;min-width:48px;color:var(--text-light)"><div style="font-size:.65rem">EVE</div><div style="font-size:1.2rem;font-weight:700;color:var(--navy)">6PM</div></div>
+              <div style="flex:1"><strong style="color:var(--navy)">Hari Prasad</strong><div style="font-size:.78rem;color:var(--text-light)">Mathematics · SEE · Home</div></div>
+            </div>
+          </div>
+        </div>
+        <div class="tpanel">
+          <div class="tpanel-header"><div class="tpanel-title"><i class="fas fa-bell"></i> Pending Requests</div></div>
+          <div class="tpanel-body" style="display:flex;flex-direction:column;gap:10px" id="pendingRequestsMini"></div>
+          <div style="padding:0 24px 20px"><button class="btn btn-outline" style="width:100%;justify-content:center" onclick="showTSection('requests')">View All Requests</button></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- REQUESTS -->
+    <div class="tdash-section" id="ts-requests">
+      <div class="tdash-topbar"><h2>Booking Requests</h2></div>
+      <div class="tpanel">
+        <div class="tpanel-header"><div class="tpanel-title"><i class="fas fa-inbox"></i> Incoming Requests (4)</div></div>
+        <div class="tpanel-body" id="requestsList"></div>
+      </div>
+    </div>
+
+    <!-- STUDENTS -->
+    <div class="tdash-section" id="ts-students">
+      <div class="tdash-topbar"><h2>My Students</h2></div>
+      <div class="tpanel">
+        <div class="tpanel-header"><div class="tpanel-title"><i class="fas fa-users"></i> Current Students (4)</div></div>
+        <div class="tpanel-body" id="studentsList"></div>
+      </div>
+    </div>
+
+    <!-- AVAILABILITY -->
+    <div class="tdash-section" id="ts-availability">
+      <div class="tdash-topbar"><h2>Manage Availability</h2></div>
+      <div class="tpanel">
+        <div class="tpanel-header"><div class="tpanel-title"><i class="fas fa-calendar-check"></i> Available Days</div><button class="btn btn-primary btn-sm" onclick="showToast('Availability saved!')"><i class="fas fa-save"></i> Save</button></div>
+        <div class="tpanel-body">
+          <div class="availability-grid" id="dayToggles"></div>
+          <div style="margin-top:8px"><strong style="font-size:.9rem;color:var(--navy)">Time Slots</strong>
+          <div style="display:flex;flex-direction:column;gap:10px;margin-top:12px" id="timeSlots"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AREAS -->
+    <div class="tdash-section" id="ts-areas">
+      <div class="tdash-topbar"><h2>Teaching Areas</h2></div>
+      <div class="tpanel">
+        <div class="tpanel-header"><div class="tpanel-title"><i class="fas fa-map-marked-alt"></i> Wards I Can Travel To</div><button class="btn btn-primary btn-sm" onclick="showToast('Areas saved!')"><i class="fas fa-save"></i> Save</button></div>
+        <div class="tpanel-body">
+          <p style="font-size:.88rem;color:var(--text-mid);margin-bottom:16px">Add districts, local levels, and wards where you can offer home tuition.</p>
+          <div id="currentAreas" style="margin-bottom:20px"></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px">
+            <select id="aProvince" class="filter-select" onchange="aOnProvince()"><option value="">Province</option></select>
+            <select id="aDistrict" class="filter-select" disabled onchange="aOnDistrict()"><option value="">District</option></select>
+            <select id="aLL" class="filter-select" disabled><option value="">Local Level</option></select>
+          </div>
+          <button class="btn btn-navy btn-sm" style="margin-top:12px" onclick="addArea()"><i class="fas fa-plus"></i> Add Area</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- EARNINGS -->
+    <div class="tdash-section" id="ts-earnings">
+      <div class="tdash-topbar"><h2>Earnings</h2></div>
+      <div class="earn-cards">
+        <div class="earn-card e1"><div class="earn-card-label">This Month</div><div class="earn-card-val">NPR 18,000</div><div class="earn-card-sub">+NPR 2,000 from last month</div></div>
+        <div class="earn-card e2"><div class="earn-card-label">Last Month</div><div class="earn-card-val">NPR 16,000</div></div>
+        <div class="earn-card e3"><div class="earn-card-label">Total (2025)</div><div class="earn-card-val">NPR 1.2L</div></div>
+        <div class="earn-card e4"><div class="earn-card-label">Pending Payout</div><div class="earn-card-val">NPR 4,500</div><div class="earn-card-sub">Processed on 1st</div></div>
+      </div>
+      <div class="tpanel">
+        <div class="tpanel-header"><div class="tpanel-title"><i class="fas fa-chart-bar"></i> Monthly Earnings</div></div>
+        <div class="tpanel-body"><div style="display:flex;gap:8px;align-items:flex-end;height:120px" id="earningsChart"></div></div>
+      </div>
+      <div class="tpanel">
+        <div class="tpanel-header"><div class="tpanel-title"><i class="fas fa-list"></i> Payment History</div></div>
+        <div class="tpanel-body" id="earningsTable"></div>
+      </div>
+    </div>
+
+    <!-- REVIEWS -->
+    <div class="tdash-section" id="ts-reviews">
+      <div class="tdash-topbar"><h2>My Reviews</h2></div>
+      <div class="tpanel">
+        <div class="tpanel-header"><div class="tpanel-title"><i class="fas fa-star"></i> Rating Summary</div></div>
+        <div class="tpanel-body">
+          <div class="rating-summary">
+            <div style="text-align:center"><div class="big-rating">4.9</div><div style="color:var(--warning);font-size:1.3rem">★★★★★</div><div style="font-size:.78rem;color:var(--text-light)">47 reviews</div></div>
+            <div class="rating-bars">
+              <div class="rating-bar-row"><span style="width:14px">5</span><i class="fas fa-star" style="color:var(--warning);font-size:.75rem"></i><div class="rating-bar-fill"><div style="width:85%"></div></div><span>40</span></div>
+              <div class="rating-bar-row"><span style="width:14px">4</span><i class="fas fa-star" style="color:var(--warning);font-size:.75rem"></i><div class="rating-bar-fill"><div style="width:13%"></div></div><span>6</span></div>
+              <div class="rating-bar-row"><span style="width:14px">3</span><i class="fas fa-star" style="color:var(--warning);font-size:.75rem"></i><div class="rating-bar-fill"><div style="width:2%"></div></div><span>1</span></div>
+              <div class="rating-bar-row"><span style="width:14px">2</span><i class="fas fa-star" style="color:var(--warning);font-size:.75rem"></i><div class="rating-bar-fill"><div style="width:0%"></div></div><span>0</span></div>
+              <div class="rating-bar-row"><span style="width:14px">1</span><i class="fas fa-star" style="color:var(--warning);font-size:.75rem"></i><div class="rating-bar-fill"><div style="width:0%"></div></div><span>0</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="tpanel">
+        <div class="tpanel-header"><div class="tpanel-title"><i class="fas fa-comments"></i> Recent Reviews</div></div>
+        <div class="tpanel-body" id="reviewsList"></div>
+      </div>
+    </div>
+
+    <!-- PROFILE -->
+    <div class="tdash-section" id="ts-profile">
+      <div class="tdash-topbar"><h2>Edit Profile</h2><button class="btn btn-primary btn-sm" onclick="showToast('Profile updated successfully!')"><i class="fas fa-save"></i> Save Changes</button></div>
+      <div class="tpanel">
+        <div class="tpanel-header"><div class="tpanel-title"><i class="fas fa-user"></i> Teacher Information</div></div>
+        <div class="tpanel-body" style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+          <div><label style="display:block;font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-light);margin-bottom:6px">Full Name</label><input style="width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:'DM Sans',sans-serif;font-size:.9rem;outline:none" value="Sushila Adhikari"/></div>
+          <div><label style="display:block;font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-light);margin-bottom:6px">Phone</label><input style="width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:'DM Sans',sans-serif;font-size:.9rem;outline:none" value="9800000001"/></div>
+          <div><label style="display:block;font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-light);margin-bottom:6px">Qualification</label><input style="width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:'DM Sans',sans-serif;font-size:.9rem;outline:none" value="M.Ed Mathematics, Tribhuvan University"/></div>
+          <div><label style="display:block;font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-light);margin-bottom:6px">Experience</label><input style="width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:'DM Sans',sans-serif;font-size:.9rem;outline:none" value="8 years"/></div>
+          <div><label style="display:block;font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-light);margin-bottom:6px">Monthly Rate (NPR)</label><input style="width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:'DM Sans',sans-serif;font-size:.9rem;outline:none" value="4500"/></div>
+          <div><label style="display:block;font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-light);margin-bottom:6px">Hourly Rate (NPR)</label><input style="width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:'DM Sans',sans-serif;font-size:.9rem;outline:none" value="300"/></div>
+          <div style="grid-column:1/-1"><label style="display:block;font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-light);margin-bottom:6px">Bio</label><textarea style="width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:'DM Sans',sans-serif;font-size:.9rem;outline:none;resize:vertical" rows="3">8 years of experience teaching Math & Science. SEE distinction guarantee program.</textarea></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DOCUMENTS -->
+    <div class="tdash-section" id="ts-documents">
+      <div class="tdash-topbar"><h2>Documents</h2></div>
+      <div class="tpanel">
+        <div class="tpanel-header"><div class="tpanel-title"><i class="fas fa-file-alt"></i> Uploaded Documents</div></div>
+        <div class="tpanel-body" style="display:flex;flex-direction:column;gap:14px">
+          <div style="display:flex;align-items:center;gap:16px;padding:16px;background:var(--cream);border-radius:var(--radius);border:1.5px solid var(--border)">
+            <div style="width:44px;height:44px;background:#d1fae5;border-radius:10px;display:flex;align-items:center;justify-content:center;color:var(--success);font-size:1.2rem"><i class="fas fa-id-card"></i></div>
+            <div style="flex:1"><strong style="color:var(--navy)">Citizenship Certificate</strong><div style="font-size:.78rem;color:var(--text-light)">Uploaded 15 Jan 2025</div></div>
+            <span style="background:#d1fae5;color:#065f46;padding:4px 12px;border-radius:100px;font-size:.72rem;font-weight:700"><i class="fas fa-check"></i> Verified</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:16px;padding:16px;background:var(--cream);border-radius:var(--radius);border:1.5px solid var(--border)">
+            <div style="width:44px;height:44px;background:#fef3c7;border-radius:10px;display:flex;align-items:center;justify-content:center;color:var(--warning);font-size:1.2rem"><i class="fas fa-certificate"></i></div>
+            <div style="flex:1"><strong style="color:var(--navy)">M.Ed Degree Certificate</strong><div style="font-size:.78rem;color:var(--text-light)">Uploaded 15 Jan 2025</div></div>
+            <span style="background:#fef3c7;color:#92400e;padding:4px 12px;border-radius:100px;font-size:.72rem;font-weight:700"><i class="fas fa-clock"></i> Pending</span>
+          </div>
+          <div style="border:2px dashed var(--border);border-radius:var(--radius);padding:28px;text-align:center;cursor:pointer;transition:var(--transition)" onclick="showToast('Upload dialog opening...')">
+            <i class="fas fa-cloud-upload-alt" style="font-size:1.8rem;color:var(--border-dark);margin-bottom:10px"></i>
+            <p style="font-size:.88rem;color:var(--text-mid)"><strong>Upload New Document</strong><br/><span style="font-size:.78rem">Drag & drop or click — JPG, PNG, PDF</span></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SCHEDULE -->
+    <div class="tdash-section" id="ts-schedule">
+      <div class="tdash-topbar"><h2>My Schedule</h2></div>
+      <div class="tpanel">
+        <div class="tpanel-header"><div class="tpanel-title"><i class="fas fa-calendar-week"></i> This Week</div></div>
+        <div class="tpanel-body" id="scheduleGrid"></div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<div class="toast" id="toast"></div>
+<script src="db.js"></script>
+<script src="app.js"></script>
+<script>
+const teacher = DB.teachers[0];
+let isOnline = true;
+
+function showTSection(name) {
+  document.querySelectorAll('.tdash-section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tnav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('ts-' + name)?.classList.add('active');
+  document.querySelector(`.tnav-item[onclick*="'${name}'"]`)?.classList.add('active');
+}
+
+function toggleOnline() {
+  isOnline = !isOnline;
+  document.getElementById('statusDot').style.background = isOnline ? '#34d399' : '#94a3b8';
+  document.getElementById('statusText').textContent = isOnline ? 'Online' : 'Offline';
+  showToast(isOnline ? 'You are now Online!' : 'You are now Offline');
+}
+
+function buildRequests() {
+  const names = ['Anil Sharma','Gita Devi','Binod Rai','Sunita Magar'];
+  const subjects = ['Mathematics','Physics','Statistics','Math + Science'];
+  const list = document.getElementById('requestsList');
+  const mini = document.getElementById('pendingRequestsMini');
+  if (!list) return;
+  names.forEach((name, i) => {
+    const html = `<div class="request-card">
+      <div class="req-avatar">${name.split(' ').map(n=>n[0]).join('')}</div>
+      <div style="flex:1">
+        <strong style="color:var(--navy)">${name}</strong>
+        <div style="font-size:.78rem;color:var(--text-light)">${subjects[i]} · ${i%2===0?'Home Tuition':'Online'} · NPR 4,500/mo</div>
+        <div style="font-size:.75rem;color:var(--text-light);margin-top:2px"><i class="fas fa-map-marker-alt" style="color:var(--orange)"></i> Kathmandu, Ward ${10+i}</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:6px;align-items:flex-end">
+        <button class="btn btn-sm" style="background:#d1fae5;color:#065f46;border:none" onclick="this.closest('.request-card').style.opacity='.4';showToast('${name} booking accepted!')"><i class="fas fa-check"></i> Accept</button>
+        <button class="btn btn-sm" style="background:#fee2e2;color:#991b1b;border:none" onclick="showToast('Request declined', 'times-circle')"><i class="fas fa-times"></i> Decline</button>
+      </div></div>`;
+    list.innerHTML += html;
+    if (mini && i < 2) mini.innerHTML += `<div style="display:flex;align-items:center;gap:10px;padding:10px;background:var(--cream);border-radius:var(--radius-sm)"><div style="width:32px;height:32px;border-radius:50%;background:var(--cream2);display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:700;color:var(--navy)">${name.split(' ').map(n=>n[0]).join('')}</div><div style="flex:1;font-size:.82rem"><strong style="color:var(--navy)">${name}</strong><div style="color:var(--text-light)">${subjects[i]}</div></div><span style="background:var(--orange-pale);color:var(--orange);font-size:.68rem;font-weight:700;padding:2px 8px;border-radius:100px">New</span></div>`;
+  });
+}
+
+function buildStudentsList() {
+  const list = document.getElementById('studentsList');
+  if (!list) return;
+  const students = [
+    {name:'Ramesh Gautam', subj:'Mathematics', since:'Mar 2025', mode:'Home'},
+    {name:'Sita Magar', subj:'Statistics', since:'Apr 2025', mode:'Online'},
+    {name:'Hari Prasad', subj:'Mathematics', since:'Feb 2025', mode:'Home'},
+    {name:'Priya KC', subj:'Math + Science', since:'May 2025', mode:'Online'},
+  ];
+  students.forEach(s => {
+    list.innerHTML += `<div class="request-card">
+      <div class="req-avatar">${s.name.split(' ').map(n=>n[0]).join('')}</div>
+      <div style="flex:1"><strong style="color:var(--navy)">${s.name}</strong>
+        <div style="font-size:.78rem;color:var(--text-light)">${s.subj} · ${s.mode} · Since ${s.since}</div></div>
+      <div style="display:flex;gap:8px">
+        <span class="booking-status status-active" style="align-self:center">Active</span>
+        <button class="btn btn-primary btn-sm" onclick="showToast('Chat with ${s.name}...')"><i class="fas fa-comment"></i></button>
+      </div></div>`;
+  });
+}
+
+function buildDayToggles() {
+  const grid = document.getElementById('dayToggles');
+  if (!grid) return;
+  const days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  const activeDays = teacher.available_days;
+  days.forEach(d => {
+    grid.innerHTML += `<div class="day-toggle ${activeDays.includes(d)?'on':''}" onclick="this.classList.toggle('on')">${d}</div>`;
+  });
+  const slots = document.getElementById('timeSlots');
+  if (!slots) return;
+  ['6:00 AM – 8:00 AM','10:00 AM – 12:00 PM','4:00 PM – 7:00 PM','7:00 PM – 9:00 PM'].forEach((s,i) => {
+    slots.innerHTML += `<label style="display:flex;align-items:center;gap:10px;font-size:.88rem;color:var(--text-mid);cursor:pointer">
+      <input type="checkbox" ${i<2?'checked':''} style="accent-color:var(--orange);width:16px;height:16px"/> ${s}</label>`;
+  });
+}
+
+let currentAreas = ['Kathmandu Metropolitan City, Bagmati','Lalitpur Metropolitan City, Bagmati'];
+function buildAreas() {
+  const container = document.getElementById('currentAreas');
+  if (!container) return;
+  container.innerHTML = '<div style="margin-bottom:10px;font-size:.8rem;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:.08em">Current Teaching Areas</div><div>';
+  currentAreas.forEach((a, i) => {
+    container.innerHTML += `<span class="area-chip">${a} <button onclick="removeArea(${i})"><i class="fas fa-times"></i></button></span>`;
+  });
+  container.innerHTML += '</div>';
+}
+function removeArea(i) {
+  currentAreas.splice(i,1);
+  buildAreas();
+  showToast('Area removed');
+}
+function addArea() {
+  const ll = document.getElementById('aLL').value;
+  const dist = document.getElementById('aDistrict');
+  if (!dist.value) { showToast('Please select a district', 'exclamation-circle'); return; }
+  const distName = dist.options[dist.selectedIndex].text;
+  const province = document.getElementById('aProvince');
+  const provName = province.options[province.selectedIndex].text.replace(' Province','');
+  currentAreas.push(`${ll ? document.getElementById('aLL').options[document.getElementById('aLL').selectedIndex].text + ', ' : ''}${distName}, ${provName}`);
+  buildAreas();
+  showToast('Teaching area added!');
+}
+function aOnProvince() {
+  const pid = parseInt(document.getElementById('aProvince').value);
+  const distSel = document.getElementById('aDistrict');
+  distSel.innerHTML = '<option value="">District</option>';
+  distSel.disabled = !pid;
+  if (!pid) return;
+  DB.getDistrictsByProvince(pid).forEach(d => { distSel.innerHTML += `<option value="${d.id}">${d.name}</option>`; });
+}
+function aOnDistrict() {
+  const did = parseInt(document.getElementById('aDistrict').value);
+  const llSel = document.getElementById('aLL');
+  llSel.innerHTML = '<option value="">Local Level</option>';
+  llSel.disabled = !did;
+  if (!did) return;
+  DB.getLocalLevelsByDistrict(did).forEach(l => { llSel.innerHTML += `<option value="${l.id}">${l.name}</option>`; });
+}
+
+function buildEarnings() {
+  const months = ['Jan','Feb','Mar','Apr','May'];
+  const vals = [12000,14000,16000,15000,18000];
+  const max = Math.max(...vals);
+  const chart = document.getElementById('earningsChart');
+  if (!chart) return;
+  months.forEach((m, i) => {
+    chart.innerHTML += `<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:6px">
+      <div style="font-size:.72rem;font-weight:700;color:var(--navy)">NPR ${(vals[i]/1000).toFixed(0)}K</div>
+      <div style="width:100%;background:linear-gradient(to top,var(--orange),var(--orange-light));border-radius:4px 4px 0 0;height:${(vals[i]/max)*100}px"></div>
+      <div style="font-size:.68rem;color:var(--text-light)">${m}</div></div>`;
+  });
+  const table = document.getElementById('earningsTable');
+  if (!table) return;
+  months.forEach((m, i) => {
+    table.innerHTML += `<div style="display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid var(--border)">
+      <div><strong style="color:var(--navy)">${m} 2025</strong><div style="font-size:.75rem;color:var(--text-light)">4 students · Paid on 1st</div></div>
+      <div style="text-align:right"><strong style="color:var(--navy)">NPR ${vals[i].toLocaleString()}</strong><div style="font-size:.72rem;color:var(--success)"><i class="fas fa-check-circle"></i> Received</div></div></div>`;
+  });
+}
+
+function buildReviews() {
+  const list = document.getElementById('reviewsList');
+  if (!list) return;
+  const reviews = [
+    {name:'Ramesh Gautam', text:'Exceptional teacher! My son went from C to A+ in Math. Highly recommended.', rating:5, date:'May 2025'},
+    {name:'Kamala Adhikari', text:'Very patient and professional. She explains concepts in a simple way.', rating:5, date:'Apr 2025'},
+    {name:'Binod Rai', text:'Great teaching methods. My daughter loves her classes.', rating:4, date:'Mar 2025'},
+  ];
+  reviews.forEach(r => {
+    list.innerHTML += `<div style="padding:16px 0;border-bottom:1px solid var(--border)">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+        <div style="display:flex;align-items:center;gap:10px">
+          <div style="width:36px;height:36px;border-radius:50%;background:var(--cream2);display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--navy);font-size:.85rem">${r.name.split(' ').map(n=>n[0]).join('')}</div>
+          <strong style="color:var(--navy)">${r.name}</strong>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <span style="color:var(--warning)">${'★'.repeat(r.rating)}</span>
+          <span style="font-size:.75rem;color:var(--text-light)">${r.date}</span>
+        </div>
+      </div>
+      <p style="font-size:.88rem;color:var(--text-mid);font-style:italic">"${r.text}"</p></div>`;
+  });
+}
+
+function buildSchedule() {
+  const grid = document.getElementById('scheduleGrid');
+  if (!grid) return;
+  const days = ['Sun 18','Mon 19','Tue 20','Wed 21','Thu 22','Fri 23','Sat 24'];
+  const sessions = {
+    'Sun 18':[{time:'6AM',student:'Ramesh',subj:'Math'}],
+    'Mon 19':[{time:'6AM',student:'Hari',subj:'Math'},{time:'4PM',student:'Sita',subj:'Stats'}],
+    'Tue 20':[{time:'6AM',student:'Ramesh',subj:'Math'}],
+    'Wed 21':[{time:'4PM',student:'Priya',subj:'Science'}],
+    'Thu 22':[{time:'6AM',student:'Ramesh',subj:'Math'},{time:'4PM',student:'Sita',subj:'Stats'},{time:'6PM',student:'Hari',subj:'Math'}],
+    'Fri 23':[],
+    'Sat 24':[{time:'10AM',student:'Priya',subj:'Math'}],
+  };
+  grid.innerHTML = `<div style="display:grid;grid-template-columns:repeat(7,1fr);gap:8px">` +
+    days.map(d => `<div>
+      <div style="font-size:.75rem;font-weight:700;color:var(--text-light);text-align:center;margin-bottom:8px;padding-bottom:8px;border-bottom:1px solid var(--border)">${d}</div>
+      ${(sessions[d]||[]).map(s => `<div style="background:${d==='Thu 22'?'var(--orange-pale)':'var(--cream)'};border:1.5px solid ${d==='Thu 22'?'var(--orange)':'var(--border)'};border-radius:6px;padding:8px;margin-bottom:6px;font-size:.72rem">
+        <div style="font-weight:700;color:var(--navy)">${s.time}</div>
+        <div style="color:var(--text-mid)">${s.student}</div>
+        <div style="color:var(--orange)">${s.subj}</div></div>`).join('')}
+      ${(sessions[d]||[]).length===0?'<div style="text-align:center;padding:12px;font-size:.72rem;color:var(--border-dark)">Free</div>':''}
+    </div>`).join('') + `</div>`;
+}
+
+// Populate area province selects
+document.addEventListener('DOMContentLoaded', () => {
+  buildRequests();
+  buildStudentsList();
+  buildDayToggles();
+  buildAreas();
+  buildEarnings();
+  buildReviews();
+  buildSchedule();
+  // Area selects
+  const aProvSel = document.getElementById('aProvince');
+  if (aProvSel) {
+    DB.provinces.forEach(p => { aProvSel.innerHTML += `<option value="${p.id}">${p.name}</option>`; });
+  }
+});
+</script>
+</body>
+</html>

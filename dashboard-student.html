@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Student Dashboard — EkkaTakka Academy</title>
+<link rel="stylesheet" href="style.css"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+<style>
+body{background:var(--cream)}
+.dash-layout{display:flex;min-height:100vh;padding-top:68px}
+.dash-sidebar{width:220px;background:var(--white);border-right:1px solid var(--border);position:fixed;top:68px;bottom:0;left:0;overflow-y:auto;padding:24px 12px;z-index:100}
+.dash-main{margin-left:220px;flex:1;padding:32px}
+.dash-nav-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:var(--radius-sm);color:var(--text-mid);font-size:.88rem;font-weight:500;cursor:pointer;transition:var(--transition);margin-bottom:2px;border:none;background:none;width:100%;text-align:left}
+.dash-nav-item:hover{background:var(--cream);color:var(--navy)}
+.dash-nav-item.active{background:var(--orange-pale);color:var(--orange)}
+.dash-nav-item i{width:18px;text-align:center}
+.dash-nav-section{font-size:.65rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--text-light);padding:4px 12px;margin:14px 0 6px}
+.profile-mini{text-align:center;padding:16px;margin-bottom:8px;border-bottom:1px solid var(--border)}
+.profile-mini-avatar{width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--navy),var(--navy-light));display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;color:var(--white);margin:0 auto 12px}
+.profile-mini strong{display:block;font-size:.9rem;color:var(--navy)}
+.profile-mini span{font-size:.75rem;color:var(--text-light)}
+.dash-section{display:none}.dash-section.active{display:block}
+.dash-topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px;flex-wrap:wrap;gap:12px}
+.dash-topbar h2{font-family:'Playfair Display',serif;font-size:1.6rem;color:var(--navy-dark)}
+.dash-cards{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:28px}
+.dash-card{background:var(--white);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow-xs)}
+.dash-card-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1rem;margin-bottom:12px}
+.dash-card-val{font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:700;color:var(--navy);line-height:1}
+.dash-card-label{font-size:.75rem;color:var(--text-light);margin-top:4px}
+.panel{background:var(--white);border-radius:var(--radius-lg);box-shadow:var(--shadow-xs);overflow:hidden;margin-bottom:20px}
+.panel-header{padding:18px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.panel-title{font-size:.95rem;font-weight:700;color:var(--navy);display:flex;align-items:center;gap:8px}
+.panel-title i{color:var(--orange)}
+.panel-body{padding:24px}
+.booking-item{display:flex;align-items:center;gap:16px;padding:16px;border:1.5px solid var(--border);border-radius:var(--radius);margin-bottom:12px;transition:var(--transition)}
+.booking-item:hover{border-color:var(--orange);box-shadow:var(--shadow-sm)}
+.booking-avatar{width:52px;height:52px;border-radius:12px;background:linear-gradient(135deg,var(--navy),var(--navy-light));display:flex;align-items:center;justify-content:center;color:var(--white);font-weight:700;font-size:1rem;flex-shrink:0}
+.booking-info{flex:1;min-width:0}
+.booking-name{font-weight:700;color:var(--navy);margin-bottom:2px}
+.booking-meta{font-size:.78rem;color:var(--text-light)}
+.booking-status{font-size:.72rem;font-weight:700;padding:4px 12px;border-radius:100px}
+.status-active{background:#d1fae5;color:#065f46}
+.status-pending{background:#fef3c7;color:#92400e}
+.status-completed{background:#e0e7ff;color:#3730a3}
+.chat-box{height:300px;border:1.5px solid var(--border);border-radius:var(--radius);overflow-y:auto;padding:16px;margin-bottom:12px;background:var(--cream)}
+.chat-msg{display:flex;gap:10px;margin-bottom:14px}
+.chat-msg.sent{flex-direction:row-reverse}
+.chat-bubble{max-width:75%;background:var(--white);border-radius:12px;padding:10px 14px;font-size:.88rem;color:var(--text-dark);box-shadow:var(--shadow-xs)}
+.chat-msg.sent .chat-bubble{background:var(--navy);color:var(--white)}
+.chat-input-row{display:flex;gap:10px}
+.chat-input{flex:1;border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:10px 16px;font-size:.9rem;outline:none;transition:var(--transition);font-family:'DM Sans',sans-serif}
+.chat-input:focus{border-color:var(--orange)}
+@media(max-width:768px){.dash-sidebar{display:none}.dash-main{margin-left:0;padding:20px}.dash-cards{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<nav class="navbar light" id="navbar">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo"><img src="logo.png" alt="" style="filter:none"/><span class="nav-logo-text" style="color:var(--navy)">EkkaTakka Academy</span></a>
+    <div class="nav-actions" style="margin-left:auto">
+      <a href="find-teachers.html" class="btn btn-primary btn-sm"><i class="fas fa-search"></i> Find Teachers</a>
+      <a href="index.html" class="btn btn-outline btn-sm"><i class="fas fa-sign-out-alt"></i> Logout</a>
+    </div>
+  </div>
+</nav>
+
+<div class="dash-layout">
+  <!-- Sidebar -->
+  <aside class="dash-sidebar">
+    <div class="profile-mini">
+      <div class="profile-mini-avatar">RG</div>
+      <strong>Ramesh Gautam</strong>
+      <span>Kaski, Gandaki</span>
+    </div>
+    <button class="dash-nav-item active" onclick="showDashSection('overview')"><i class="fas fa-home"></i> Overview</button>
+    <button class="dash-nav-item" onclick="showDashSection('bookings')"><i class="fas fa-calendar-check"></i> My Bookings</button>
+    <button class="dash-nav-item" onclick="showDashSection('saved')"><i class="fas fa-heart"></i> Saved Teachers</button>
+    <button class="dash-nav-item" onclick="showDashSection('chat')"><i class="fas fa-comments"></i> Messages</button>
+    <div class="dash-nav-section">Learning</div>
+    <button class="dash-nav-item" onclick="showDashSection('classes')"><i class="fas fa-laptop"></i> Online Classes</button>
+    <button class="dash-nav-item" onclick="showDashSection('progress')"><i class="fas fa-chart-line"></i> My Progress</button>
+    <div class="dash-nav-section">Account</div>
+    <button class="dash-nav-item" onclick="showDashSection('payments')"><i class="fas fa-rupee-sign"></i> Payments</button>
+    <button class="dash-nav-item" onclick="showDashSection('reviews')"><i class="fas fa-star"></i> My Reviews</button>
+    <button class="dash-nav-item" onclick="showDashSection('profile')"><i class="fas fa-user"></i> Profile</button>
+    <button class="dash-nav-item" style="color:var(--text-light)" onclick="window.location='index.html'"><i class="fas fa-sign-out-alt"></i> Logout</button>
+  </aside>
+
+  <main class="dash-main">
+
+    <!-- OVERVIEW -->
+    <div class="dash-section active" id="ds-overview">
+      <div class="dash-topbar">
+        <div><h2>Good Morning, Ramesh! 👋</h2><p style="color:var(--text-light);font-size:.88rem">Here's your learning summary</p></div>
+        <a href="find-teachers.html" class="btn btn-primary btn-sm"><i class="fas fa-search"></i> Find New Teacher</a>
+      </div>
+      <div class="dash-cards">
+        <div class="dash-card"><div class="dash-card-icon" style="background:var(--orange-pale);color:var(--orange)"><i class="fas fa-calendar-check"></i></div><div class="dash-card-val">3</div><div class="dash-card-label">Active Bookings</div></div>
+        <div class="dash-card"><div class="dash-card-icon" style="background:#d1fae5;color:var(--success)"><i class="fas fa-book-open"></i></div><div class="dash-card-val">5</div><div class="dash-card-label">Classes This Week</div></div>
+        <div class="dash-card"><div class="dash-card-icon" style="background:#e8f0f9;color:var(--navy)"><i class="fas fa-heart"></i></div><div class="dash-card-val">7</div><div class="dash-card-label">Saved Teachers</div></div>
+        <div class="dash-card"><div class="dash-card-icon" style="background:#fef3c7;color:var(--warning)"><i class="fas fa-star"></i></div><div class="dash-card-val">2</div><div class="dash-card-label">Reviews Given</div></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1.4fr 1fr;gap:20px">
+        <div class="panel">
+          <div class="panel-header"><div class="panel-title"><i class="fas fa-calendar"></i> Upcoming Classes</div></div>
+          <div class="panel-body" style="display:flex;flex-direction:column;gap:12px">
+            <div style="display:flex;align-items:center;gap:14px;padding:14px;background:var(--orange-pale);border-radius:var(--radius-sm);border-left:4px solid var(--orange)">
+              <div style="text-align:center;min-width:44px"><div style="font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;color:var(--orange)">22</div><div style="font-size:.65rem;color:var(--orange)">MAY</div></div>
+              <div><strong style="color:var(--navy)">Mathematics — Sushila Adhikari</strong><div style="font-size:.78rem;color:var(--text-light)">6:00 AM – 8:00 AM · Home Tuition</div></div>
+              <span style="margin-left:auto;background:var(--success);color:var(--white);font-size:.7rem;padding:3px 8px;border-radius:100px">Today</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:14px;padding:14px;background:var(--cream);border-radius:var(--radius-sm)">
+              <div style="text-align:center;min-width:44px"><div style="font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;color:var(--navy)">23</div><div style="font-size:.65rem;color:var(--text-light)">MAY</div></div>
+              <div><strong style="color:var(--navy)">Physics — Narayan Sharma</strong><div style="font-size:.78rem;color:var(--text-light)">5:00 AM – 7:00 AM · Home Tuition</div></div>
+            </div>
+            <div style="display:flex;align-items:center;gap:14px;padding:14px;background:var(--cream);border-radius:var(--radius-sm)">
+              <div style="text-align:center;min-width:44px"><div style="font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;color:var(--navy)">24</div><div style="font-size:.65rem;color:var(--text-light)">MAY</div></div>
+              <div><strong style="color:var(--navy)">English — Priya Rai</strong><div style="font-size:.78rem;color:var(--text-light)">4:00 PM – 6:00 PM · Online</div></div>
+            </div>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="panel-header"><div class="panel-title"><i class="fas fa-bolt"></i> Quick Actions</div></div>
+          <div class="panel-body" style="display:flex;flex-direction:column;gap:10px">
+            <button class="btn btn-primary" style="width:100%;justify-content:center" onclick="window.location='find-teachers.html'"><i class="fas fa-search"></i> Find Teachers Nearby</button>
+            <button class="btn btn-navy" style="width:100%;justify-content:center" onclick="showDashSection('chat')"><i class="fas fa-comments"></i> Message My Teacher</button>
+            <button class="btn btn-outline" style="width:100%;justify-content:center" onclick="showDashSection('payments')"><i class="fas fa-rupee-sign"></i> Pay via eSewa/Khalti</button>
+            <button class="btn" style="width:100%;justify-content:center;background:var(--cream);border:1.5px solid var(--border);color:var(--text-mid)" onclick="showDashSection('reviews')"><i class="fas fa-star"></i> Write a Review</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BOOKINGS -->
+    <div class="dash-section" id="ds-bookings">
+      <div class="dash-topbar"><h2>My Bookings</h2><a href="find-teachers.html" class="btn btn-primary btn-sm"><i class="fas fa-plus"></i> Book New Teacher</a></div>
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title"><i class="fas fa-calendar-check"></i> Active & Upcoming</div>
+          <div class="tabs" style="margin-bottom:0">
+            <button class="tab-btn active" onclick="filterBookings('all',this)">All</button>
+            <button class="tab-btn" onclick="filterBookings('active',this)">Active</button>
+            <button class="tab-btn" onclick="filterBookings('pending',this)">Pending</button>
+            <button class="tab-btn" onclick="filterBookings('completed',this)">Completed</button>
+          </div>
+        </div>
+        <div class="panel-body" id="bookingsList"></div>
+      </div>
+    </div>
+
+    <!-- SAVED -->
+    <div class="dash-section" id="ds-saved">
+      <div class="dash-topbar"><h2>Saved Teachers</h2></div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px" id="savedTeachersGrid"></div>
+    </div>
+
+    <!-- CHAT -->
+    <div class="dash-section" id="ds-chat">
+      <div class="dash-topbar"><h2>Messages</h2></div>
+      <div style="display:grid;grid-template-columns:260px 1fr;gap:20px;height:500px">
+        <div class="panel" style="overflow-y:auto">
+          <div class="panel-header"><div class="panel-title"><i class="fas fa-comments"></i> Chats</div></div>
+          <div id="chatList" style="padding:12px"></div>
+        </div>
+        <div class="panel" style="display:flex;flex-direction:column">
+          <div class="panel-header" id="chatHeader"><div class="panel-title"><i class="fas fa-user"></i> Select a conversation</div></div>
+          <div class="chat-box" id="chatBox"></div>
+          <div style="padding:16px;border-top:1px solid var(--border)">
+            <div class="chat-input-row">
+              <input class="chat-input" type="text" placeholder="Type a message..." id="chatInput" onkeydown="if(event.key==='Enter')sendChatMsg()"/>
+              <button class="btn btn-primary" onclick="sendChatMsg()"><i class="fas fa-paper-plane"></i></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CLASSES -->
+    <div class="dash-section" id="ds-classes">
+      <div class="dash-topbar"><h2>Online Classes</h2></div>
+      <div class="panel">
+        <div class="panel-header"><div class="panel-title"><i class="fas fa-video"></i> Upcoming Online Sessions</div></div>
+        <div class="panel-body" style="display:flex;flex-direction:column;gap:14px">
+          <div style="display:flex;align-items:center;gap:20px;padding:20px;background:linear-gradient(135deg,var(--navy-dark),var(--navy));border-radius:var(--radius-lg);color:var(--white)">
+            <div><div style="font-size:.75rem;color:rgba(255,255,255,.6);margin-bottom:4px">LIVE NOW</div><div style="font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700">English Grammar — Priya Rai</div><div style="font-size:.82rem;color:rgba(255,255,255,.65);margin-top:4px"><i class="fas fa-clock"></i> 4:00 PM – 6:00 PM</div></div>
+            <button class="btn btn-primary" style="margin-left:auto" onclick="showToast('Joining class...')"><i class="fas fa-video"></i> Join Now</button>
+          </div>
+          <div style="display:flex;align-items:center;gap:20px;padding:16px;background:var(--cream);border-radius:var(--radius);border:1.5px solid var(--border)">
+            <div><div style="font-size:.75rem;color:var(--text-light);margin-bottom:4px">Tomorrow · 5:00 AM</div><div style="font-weight:700;color:var(--navy)">Physics — Narayan Sharma</div></div>
+            <button class="btn btn-outline btn-sm" style="margin-left:auto" onclick="showToast('Link sent to your phone!')"><i class="fas fa-link"></i> Get Link</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAYMENTS -->
+    <div class="dash-section" id="ds-payments">
+      <div class="dash-topbar"><h2>Payments</h2></div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:20px">
+        <div class="dash-card"><div class="dash-card-icon" style="background:var(--orange-pale);color:var(--orange)"><i class="fas fa-rupee-sign"></i></div><div class="dash-card-val">NPR 13,500</div><div class="dash-card-label">Total Paid</div></div>
+        <div class="dash-card"><div class="dash-card-icon" style="background:#fef3c7;color:var(--warning)"><i class="fas fa-clock"></i></div><div class="dash-card-val">NPR 4,500</div><div class="dash-card-label">Due This Month</div></div>
+        <div class="dash-card"><div class="dash-card-icon" style="background:#d1fae5;color:var(--success)"><i class="fas fa-check-circle"></i></div><div class="dash-card-val">3</div><div class="dash-card-label">Months Paid</div></div>
+      </div>
+      <div class="panel">
+        <div class="panel-header"><div class="panel-title"><i class="fas fa-credit-card"></i> Pay Now</div></div>
+        <div class="panel-body">
+          <p style="font-size:.9rem;color:var(--text-mid);margin-bottom:20px">Pay your tuition fee using eSewa or Khalti</p>
+          <div style="display:flex;gap:14px;flex-wrap:wrap">
+            <button class="btn" style="background:#60BB46;color:var(--white);font-size:1rem;padding:14px 32px;border-radius:12px" onclick="showToast('Redirecting to eSewa...')"><i class="fas fa-wallet"></i> Pay with eSewa</button>
+            <button class="btn" style="background:#5C2D8C;color:var(--white);font-size:1rem;padding:14px 32px;border-radius:12px" onclick="showToast('Redirecting to Khalti...')"><i class="fas fa-mobile-alt"></i> Pay with Khalti</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PROGRESS -->
+    <div class="dash-section" id="ds-progress">
+      <div class="dash-topbar"><h2>My Progress</h2></div>
+      <div class="panel">
+        <div class="panel-header"><div class="panel-title"><i class="fas fa-chart-line"></i> Subject Progress</div></div>
+        <div class="panel-body" style="display:flex;flex-direction:column;gap:16px">
+          <div><div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="font-size:.88rem;font-weight:600;color:var(--navy)">Mathematics</span><span style="font-size:.82rem;color:var(--text-light)">85%</span></div><div style="background:var(--border);border-radius:4px;height:8px"><div style="width:85%;height:100%;background:linear-gradient(90deg,var(--orange),var(--orange-light));border-radius:4px"></div></div></div>
+          <div><div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="font-size:.88rem;font-weight:600;color:var(--navy)">Physics</span><span style="font-size:.82rem;color:var(--text-light)">72%</span></div><div style="background:var(--border);border-radius:4px;height:8px"><div style="width:72%;height:100%;background:linear-gradient(90deg,var(--navy),var(--navy-light));border-radius:4px"></div></div></div>
+          <div><div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="font-size:.88rem;font-weight:600;color:var(--navy)">English</span><span style="font-size:.82rem;color:var(--text-light)">91%</span></div><div style="background:var(--border);border-radius:4px;height:8px"><div style="width:91%;height:100%;background:linear-gradient(90deg,var(--success),#34d399);border-radius:4px"></div></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- REVIEWS -->
+    <div class="dash-section" id="ds-reviews">
+      <div class="dash-topbar"><h2>Write a Review</h2></div>
+      <div class="panel">
+        <div class="panel-header"><div class="panel-title"><i class="fas fa-star"></i> Rate Your Teacher</div></div>
+        <div class="panel-body">
+          <div style="margin-bottom:16px"><label style="display:block;font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-light);margin-bottom:8px">Select Teacher</label>
+          <select style="width:100%;padding:12px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:'DM Sans',sans-serif;font-size:.9rem;outline:none"><option>Sushila Adhikari — Mathematics</option><option>Narayan Sharma — Physics</option><option>Priya Rai — English</option></select></div>
+          <div style="margin-bottom:16px"><label style="display:block;font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-light);margin-bottom:8px">Rating</label>
+          <div id="starRater" style="display:flex;gap:6px;font-size:1.8rem;cursor:pointer">
+            <span class="star" data-val="1" onclick="setRating(1)">☆</span><span class="star" data-val="2" onclick="setRating(2)">☆</span><span class="star" data-val="3" onclick="setRating(3)">☆</span><span class="star" data-val="4" onclick="setRating(4)">☆</span><span class="star" data-val="5" onclick="setRating(5)">☆</span>
+          </div></div>
+          <div style="margin-bottom:20px"><label style="display:block;font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-light);margin-bottom:8px">Your Review</label>
+          <textarea style="width:100%;padding:12px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:'DM Sans',sans-serif;font-size:.9rem;outline:none;resize:vertical" rows="4" placeholder="Share your experience..."></textarea></div>
+          <button class="btn btn-primary" onclick="showToast('Review submitted! Thank you.')"><i class="fas fa-paper-plane"></i> Submit Review</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- PROFILE -->
+    <div class="dash-section" id="ds-profile">
+      <div class="dash-topbar"><h2>My Profile</h2></div>
+      <div class="panel">
+        <div class="panel-header"><div class="panel-title"><i class="fas fa-user"></i> Personal Information</div><button class="btn btn-primary btn-sm" onclick="showToast('Profile saved!')"><i class="fas fa-save"></i> Save</button></div>
+        <div class="panel-body" style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+          <div><label style="display:block;font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-light);margin-bottom:6px">Full Name</label><input style="width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:'DM Sans',sans-serif;font-size:.9rem;outline:none" value="Ramesh Gautam"/></div>
+          <div><label style="display:block;font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-light);margin-bottom:6px">Phone</label><input style="width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:'DM Sans',sans-serif;font-size:.9rem;outline:none" value="9800000001"/></div>
+          <div><label style="display:block;font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-light);margin-bottom:6px">District</label><input style="width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:'DM Sans',sans-serif;font-size:.9rem;outline:none" value="Kaski"/></div>
+          <div><label style="display:block;font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-light);margin-bottom:6px">Ward</label><input style="width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:'DM Sans',sans-serif;font-size:.9rem;outline:none" value="Ward 10"/></div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<div class="toast" id="toast"></div>
+<div class="modal-overlay" id="teacherModal"><div class="modal-box" id="modalBox"></div></div>
+<script src="db.js"></script>
+<script src="app.js"></script>
+<script>
+function showDashSection(name) {
+  document.querySelectorAll('.dash-section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.dash-nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('ds-' + name)?.classList.add('active');
+  document.querySelector(`.dash-nav-item[onclick*="'${name}'"]`)?.classList.add('active');
+}
+
+let chatRating = 0;
+function setRating(val) {
+  chatRating = val;
+  document.querySelectorAll('.star').forEach((s, i) => { s.textContent = i < val ? '★' : '☆'; s.style.color = i < val ? 'var(--warning)' : ''; });
+}
+
+const chatMessages = [
+  { from: 'teacher', text: 'Namaskar Ramesh ji! Bholi ko class ko lagi ready hunu hola 6 bajey.' },
+  { from: 'student', text: 'Ji teacher, tayar chu. Chapter 5 padhi sakeko chu.' },
+  { from: 'teacher', text: 'Ramro! Practice questions pani herna na birsinu.' },
+];
+function renderChat() {
+  const box = document.getElementById('chatBox');
+  if (!box) return;
+  box.innerHTML = chatMessages.map(m => `
+    <div class="chat-msg ${m.from === 'student' ? 'sent' : ''}">
+      ${m.from === 'teacher' ? '<div style="width:32px;height:32px;border-radius:50%;background:var(--navy);display:flex;align-items:center;justify-content:center;color:var(--white);font-size:.7rem;font-weight:700;flex-shrink:0">SA</div>' : ''}
+      <div class="chat-bubble">${m.text}</div>
+    </div>`).join('');
+  box.scrollTop = box.scrollHeight;
+}
+function sendChatMsg() {
+  const input = document.getElementById('chatInput');
+  if (!input?.value.trim()) return;
+  chatMessages.push({ from: 'student', text: input.value });
+  renderChat();
+  input.value = '';
+  setTimeout(() => {
+    chatMessages.push({ from: 'teacher', text: 'Thik cha, bholi bhandain.' });
+    renderChat();
+  }, 1200);
+}
+
+function buildBookingsList() {
+  const list = document.getElementById('bookingsList');
+  if (!list) return;
+  const bookings = [
+    { teacher: DB.teachers[0], status: 'active', days: 'Sun, Mon, Wed', time: '6AM-8AM', since: 'March 2025' },
+    { teacher: DB.teachers[3], status: 'active', days: 'Mon, Tue, Thu', time: '5AM-7AM', since: 'April 2025' },
+    { teacher: DB.teachers[2], status: 'pending', days: 'Sat, Sun', time: '4PM-6PM', since: 'Pending' },
+    { teacher: DB.teachers[1], status: 'completed', days: 'Daily', time: '7AM-9AM', since: 'Jan-Feb 2025' },
+  ];
+  list.innerHTML = bookings.map(b => `
+    <div class="booking-item">
+      <div class="booking-avatar">${b.teacher.initials}</div>
+      <div class="booking-info">
+        <div class="booking-name">${b.teacher.name}</div>
+        <div class="booking-meta"><i class="fas fa-book" style="color:var(--orange);margin-right:4px"></i>${b.teacher.subjects[0]} · ${b.days} · ${b.time}</div>
+        <div class="booking-meta" style="margin-top:3px"><i class="fas fa-calendar" style="margin-right:4px"></i>Since ${b.since}</div>
+      </div>
+      <div style="text-align:right">
+        <span class="booking-status status-${b.status}">${b.status.charAt(0).toUpperCase()+b.status.slice(1)}</span>
+        <div style="font-size:.82rem;font-weight:700;color:var(--navy);margin-top:8px">NPR ${b.teacher.price_monthly.toLocaleString()}/mo</div>
+        <button class="btn btn-primary btn-sm" style="margin-top:8px" onclick="openTeacherModal(${b.teacher.id})">View</button>
+      </div>
+    </div>`).join('');
+}
+
+function buildChatList() {
+  const cl = document.getElementById('chatList');
+  if (!cl) return;
+  DB.teachers.slice(0,3).forEach(t => {
+    cl.innerHTML += `<div style="display:flex;align-items:center;gap:10px;padding:10px;border-radius:var(--radius-sm);cursor:pointer;transition:var(--transition)" onmouseover="this.style.background='var(--cream)'" onmouseout="this.style.background=''" onclick="document.getElementById('chatHeader').querySelector('.panel-title').innerHTML='<i class=\\'fas fa-user\\'></i> ${t.name}';renderChat()">
+      <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--navy),var(--navy-light));display:flex;align-items:center;justify-content:center;color:var(--white);font-weight:700;font-size:.8rem;flex-shrink:0">${t.initials}</div>
+      <div style="flex:1;min-width:0"><div style="font-size:.88rem;font-weight:600;color:var(--navy)">${t.name}</div><div style="font-size:.72rem;color:var(--text-light);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${t.subjects[0]}</div></div>
+    </div>`;
+  });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  initStudentDashboard();
+  buildBookingsList();
+  buildChatList();
+  renderChat();
+});
+</script>
+</body>
+</html>

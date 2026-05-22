@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>EkkaTakka Academy | Find Teachers Across Nepal</title>
+<meta name="description" content="Find verified home tuition and online teachers in all 77 districts of Nepal."/>
+<link rel="stylesheet" href="style.css"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+</head>
+<body>
+<nav class="navbar" id="navbar">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <img src="logo.png" alt="EkkaTakka Academy"/>
+      <span class="nav-logo-text">EkkaTakka Academy</span>
+    </a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html" class="nav-link active">Home</a></li>
+      <li><a href="find-teachers.html" class="nav-link">Find Teachers</a></li>
+      <li><a href="index.html#browse" class="nav-link">Browse Nepal</a></li>
+      <li><a href="index.html#how" class="nav-link">How It Works</a></li>
+      <li><a href="teacher-register.html" class="nav-link">Become a Tutor</a></li>
+    </ul>
+    <div class="nav-actions">
+      <button class="nav-theme" id="themeToggle" title="Toggle dark mode">🌙</button>
+      <a href="find-teachers.html" class="btn btn-primary btn-sm">Find Teachers</a>
+    </div>
+    <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<section class="hero" id="home">
+  <div class="hero-bg">
+    <div class="hero-orb hero-orb-1"></div>
+    <div class="hero-orb hero-orb-2"></div>
+    <div class="hero-grid-overlay"></div>
+  </div>
+  <div class="hero-content">
+    <div>
+      <div class="hero-badge"><i class="fas fa-map-marker-alt"></i> All 77 Districts Covered</div>
+      <h1 class="hero-title">Find the Perfect<br/><span class="accent">Home Tutor</span><br/>Anywhere in Nepal</h1>
+      <p class="hero-desc">Browse verified teachers across every Province, District, Municipality, and Ward in Nepal. Home tuition or online — your choice.</p>
+      <div class="hero-ctas">
+        <a href="find-teachers.html" class="btn btn-primary btn-lg"><i class="fas fa-search"></i> Find a Teacher</a>
+        <a href="teacher-register.html" class="btn btn-ghost btn-lg"><i class="fas fa-chalkboard-teacher"></i> Become a Tutor</a>
+      </div>
+      <div class="hero-stats-row">
+        <div class="hero-stat"><span class="num" id="ctr-teachers">0</span><span class="lbl">Verified Teachers</span></div>
+        <div class="hero-divider"></div>
+        <div class="hero-stat"><span class="num" id="ctr-districts">0</span><span class="lbl">Districts Covered</span></div>
+        <div class="hero-divider"></div>
+        <div class="hero-stat"><span class="num" id="ctr-students">0</span><span class="lbl">Students Helped</span></div>
+      </div>
+    </div>
+    <div class="hero-search-box">
+      <h3><i class="fas fa-location-dot" style="color:var(--orange-light);margin-right:8px"></i>Quick Location Search</h3>
+      <div class="search-fields">
+        <div class="search-field">
+          <label>Province</label>
+          <select id="qs-province" onchange="qsOnProvince()"><option value="">Select Province</option></select>
+        </div>
+        <div class="search-fields-row">
+          <div class="search-field">
+            <label>District</label>
+            <select id="qs-district" onchange="qsOnDistrict()" disabled><option value="">Select District</option></select>
+          </div>
+          <div class="search-field">
+            <label>Subject</label>
+            <select id="qs-subject"><option value="">Any Subject</option></select>
+          </div>
+        </div>
+        <div class="search-field">
+          <label>Teaching Mode</label>
+          <select id="qs-mode">
+            <option value="">Home Tuition or Online</option>
+            <option value="Home Tuition">Home Tuition Only</option>
+            <option value="Online">Online Only</option>
+          </select>
+        </div>
+        <button class="btn btn-primary" style="width:100%;justify-content:center" onclick="quickSearch()">
+          <i class="fas fa-search"></i> Search Teachers
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="stats-bar">
+  <div class="container"><div class="stats-bar-inner">
+    <div class="stat-item"><i class="fas fa-map"></i><div><strong>7</strong><span>Provinces</span></div></div>
+    <div class="stat-item"><i class="fas fa-building"></i><div><strong>77</strong><span>Districts</span></div></div>
+    <div class="stat-item"><i class="fas fa-city"></i><div><strong>753</strong><span>Local Levels</span></div></div>
+    <div class="stat-item"><i class="fas fa-home"></i><div><strong>6,743</strong><span>Wards</span></div></div>
+    <div class="stat-item"><i class="fas fa-user-check"></i><div><strong>500+</strong><span>Verified Tutors</span></div></div>
+  </div></div>
+</div>
+
+<section class="browse-section" id="browse">
+  <div class="container">
+    <div class="section-label"><i class="fas fa-map-marked-alt"></i> Browse Nepal</div>
+    <h2 class="section-title">Find Teachers by <span class="accent">Location</span></h2>
+    <p class="section-sub">Click your Province → District → Local Level → Ward to find available tutors</p>
+    <div class="provinces-grid" id="provincesGrid"></div>
+    <div class="location-drill" id="locationDrill">
+      <div class="drill-breadcrumb" id="drillBreadcrumb"></div>
+      <div class="drill-heading" id="drillHeading"></div>
+      <div class="drill-grid" id="drillGrid"></div>
+      <div class="drill-actions" id="drillActions"></div>
+    </div>
+  </div>
+</section>
+
+<section class="featured-section" id="featured">
+  <div class="container">
+    <div class="section-label"><i class="fas fa-star"></i> Top Rated</div>
+    <div style="display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-bottom:40px">
+      <div><h2 class="section-title">Featured <span class="accent">Teachers</span></h2><p class="section-sub">Highly rated tutors trusted by hundreds of families</p></div>
+      <a href="find-teachers.html" class="btn btn-outline">View All <i class="fas fa-arrow-right"></i></a>
+    </div>
+    <div class="featured-grid" id="featuredGrid"></div>
+  </div>
+</section>
+
+<section class="map-section" id="map">
+  <div class="container">
+    <div class="section-label"><i class="fas fa-globe-asia"></i> Interactive Map</div>
+    <h2 class="section-title">Teachers Across <span class="accent">Nepal</span></h2>
+    <p class="section-sub">Click any province to explore tutors in that region</p>
+    <div class="nepal-map-container">
+      <svg class="nepal-map-svg" viewBox="0 0 760 260" id="nepalMapSvg">
+        <path class="province-shape" data-id="7" d="M15,80 L115,58 L128,100 L138,162 L78,182 L25,150 Z"/>
+        <text x="70" y="128" fill="rgba(255,255,255,0.45)" font-size="8" text-anchor="middle" pointer-events="none" font-family="DM Sans">Sudurpashchim</text>
+        <path class="province-shape" data-id="6" d="M128,58 L228,38 L248,92 L238,162 L138,162 L128,100 Z"/>
+        <text x="185" y="105" fill="rgba(255,255,255,0.45)" font-size="8" text-anchor="middle" pointer-events="none" font-family="DM Sans">Karnali</text>
+        <path class="province-shape" data-id="5" d="M228,92 L328,80 L338,142 L308,222 L238,202 L238,162 L248,92 Z"/>
+        <text x="283" y="158" fill="rgba(255,255,255,0.45)" font-size="8" text-anchor="middle" pointer-events="none" font-family="DM Sans">Lumbini</text>
+        <path class="province-shape" data-id="4" d="M248,38 L348,28 L368,92 L338,142 L328,80 L248,92 Z"/>
+        <text x="308" y="80" fill="rgba(255,255,255,0.45)" font-size="8" text-anchor="middle" pointer-events="none" font-family="DM Sans">Gandaki</text>
+        <path class="province-shape" data-id="3" d="M348,28 L458,18 L478,82 L458,152 L398,172 L368,92 Z"/>
+        <text x="413" y="93" fill="rgba(255,255,255,0.45)" font-size="8" text-anchor="middle" pointer-events="none" font-family="DM Sans">Bagmati</text>
+        <path class="province-shape" data-id="2" d="M338,142 L458,152 L488,212 L308,222 Z"/>
+        <text x="398" y="188" fill="rgba(255,255,255,0.45)" font-size="8" text-anchor="middle" pointer-events="none" font-family="DM Sans">Madhesh</text>
+        <path class="province-shape" data-id="1" d="M458,18 L598,8 L618,102 L588,182 L488,212 L458,152 L478,82 Z"/>
+        <text x="535" y="108" fill="rgba(255,255,255,0.45)" font-size="8" text-anchor="middle" pointer-events="none" font-family="DM Sans">Koshi</text>
+        <!-- Teacher dots -->
+        <circle cx="413" cy="70" r="7" fill="var(--orange)" opacity="0.9" style="cursor:pointer"><title>Kathmandu — 4 teachers</title></circle>
+        <circle cx="308" cy="65" r="5" fill="var(--orange)" opacity="0.8" style="cursor:pointer"><title>Pokhara — 2 teachers</title></circle>
+        <circle cx="540" cy="80" r="4" fill="var(--orange)" opacity="0.7" style="cursor:pointer"><title>Biratnagar — 1 teacher</title></circle>
+        <circle cx="283" cy="152" r="3" fill="var(--orange)" opacity="0.7" style="cursor:pointer"><title>Butwal — 1 teacher</title></circle>
+        <circle cx="458" cy="152" r="3" fill="var(--orange)" opacity="0.6" style="cursor:pointer"><title>Janakpur — 1 teacher</title></circle>
+      </svg>
+      <div class="map-legend">
+        <div class="map-legend-item"><div class="legend-dot" style="background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3)"></div>Province (click to explore)</div>
+        <div class="map-legend-item"><div class="legend-dot" style="background:var(--orange)"></div>Teacher hotspot</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="hiw-section" id="how">
+  <div class="container">
+    <div class="section-label"><i class="fas fa-route"></i> Simple Process</div>
+    <h2 class="section-title" style="text-align:center">How It <span class="accent">Works</span></h2>
+    <div class="hiw-grid">
+      <div class="hiw-card fade-up"><div class="hiw-step">1</div><div class="hiw-icon"><i class="fas fa-map-marker-alt"></i></div><h3>Select Location</h3><p>Choose Province → District → Local Level → Ward to find teachers near you.</p></div>
+      <div class="hiw-card fade-up" style="transition-delay:.1s"><div class="hiw-step">2</div><div class="hiw-icon"><i class="fas fa-filter"></i></div><h3>Filter & Match</h3><p>Filter by subject, grade, mode, gender, language, experience and budget.</p></div>
+      <div class="hiw-card fade-up" style="transition-delay:.2s"><div class="hiw-step">3</div><div class="hiw-icon"><i class="fas fa-user-check"></i></div><h3>View Profile</h3><p>Review qualifications, ratings, availability schedule and pricing details.</p></div>
+      <div class="hiw-card fade-up" style="transition-delay:.3s"><div class="hiw-step">4</div><div class="hiw-icon"><i class="fas fa-graduation-cap"></i></div><h3>Book & Learn</h3><p>Request free demo class, confirm booking and start your learning journey!</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="testimonials-section">
+  <div class="container">
+    <div class="section-label"><i class="fas fa-quote-left"></i> Reviews</div>
+    <h2 class="section-title">What Families <span class="accent">Say</span></h2>
+    <div class="testimonials-grid">
+      <div class="testimonial-card fade-up"><div class="testimonial-stars">★★★★★</div><p class="testimonial-text">"Found an amazing Math teacher in our ward within 24 hours. My son's SEE results improved from C+ to A+. EkkaTakka is a game changer for Nepal!"</p><div class="testimonial-author"><div class="testimonial-avatar">R</div><div><div class="testimonial-author-name">Ramesh Gautam</div><div class="testimonial-author-loc"><i class="fas fa-map-marker-alt" style="color:var(--orange);margin-right:4px"></i>Kaski, Gandaki</div></div></div></div>
+      <div class="testimonial-card fade-up" style="transition-delay:.1s"><div class="testimonial-stars">★★★★★</div><p class="testimonial-text">"The location-based search is genius! Selected my ward in Kathmandu and got 3 verified teacher options instantly. Quality is excellent and pricing is fair."</p><div class="testimonial-author"><div class="testimonial-avatar">K</div><div><div class="testimonial-author-name">Kamala Adhikari</div><div class="testimonial-author-loc"><i class="fas fa-map-marker-alt" style="color:var(--orange);margin-right:4px"></i>Kathmandu, Bagmati</div></div></div></div>
+      <div class="testimonial-card fade-up" style="transition-delay:.2s"><div class="testimonial-stars">★★★★☆</div><p class="testimonial-text">"As someone in Pokhara, finding a Computer Science tutor was hard. EkkaTakka helped me find one who comes to my home. The booking process was super easy!"</p><div class="testimonial-author"><div class="testimonial-avatar">S</div><div><div class="testimonial-author-name">Sita Thapa</div><div class="testimonial-author-loc"><i class="fas fa-map-marker-alt" style="color:var(--orange);margin-right:4px"></i>Pokhara, Gandaki</div></div></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-banner">
+  <div class="container-sm">
+    <h2>Ready to Find Your Perfect <span class="accent">Teacher?</span></h2>
+    <p>Join thousands of students across Nepal learning smarter with EkkaTakka Academy</p>
+    <div class="cta-btns">
+      <a href="find-teachers.html" class="btn btn-primary btn-lg"><i class="fas fa-search"></i> Find Teachers Now</a>
+      <a href="tel:9763248479" class="btn btn-ghost btn-lg"><i class="fas fa-phone"></i> Call: 9763248479</a>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand"><img src="logo.png" alt="EkkaTakka Academy" class="footer-logo"/><p>Nepal's most trusted home tuition and online tutoring platform — covering all 77 districts. Connecting students with verified, qualified teachers everywhere.</p><div class="social-row"><a href="#" class="social-btn"><i class="fab fa-facebook-f"></i></a><a href="https://wa.me/9779763248479" class="social-btn"><i class="fab fa-whatsapp"></i></a><a href="#" class="social-btn"><i class="fab fa-instagram"></i></a><a href="#" class="social-btn"><i class="fab fa-youtube"></i></a></div></div>
+      <div class="footer-col"><h5>Platform</h5><ul><li><a href="find-teachers.html">Find Teachers</a></li><li><a href="teacher-register.html">Become a Tutor</a></li><li><a href="#">Student Dashboard</a></li><li><a href="#">Teacher Dashboard</a></li></ul></div>
+      <div class="footer-col"><h5>Browse</h5><ul><li><a href="find-teachers.html?province=3">Bagmati Province</a></li><li><a href="find-teachers.html?province=4">Gandaki Province</a></li><li><a href="find-teachers.html?province=1">Koshi Province</a></li><li><a href="find-teachers.html">All Provinces →</a></li></ul></div>
+      <div class="footer-col"><h5>Contact</h5><ul><li><i class="fas fa-map-marker-alt"></i>Pokhara, Nepal</li><li><i class="fas fa-phone"></i><a href="tel:9763248479">9763248479</a></li><li><i class="fas fa-user-tie"></i>Director: Lilavajra B Shreepali</li><li><i class="fas fa-globe"></i>Worldwide Education Platform</li></ul></div>
+    </div>
+    <div class="footer-bottom"><p>&copy; 2025 EkkaTakka Academy. All Rights Reserved.</p><p>Home Tuition Nepal | Worldwide Education Platform</p></div>
+  </div>
+</footer>
+
+<button class="scroll-top" id="scrollTop"><i class="fas fa-chevron-up"></i></button>
+<div class="toast" id="toast"></div>
+<div class="modal-overlay" id="teacherModal"><div class="modal-box" id="modalBox"></div></div>
+
+<script src="db.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

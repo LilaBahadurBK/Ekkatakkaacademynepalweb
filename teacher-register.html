@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Register as Tutor — EkkaTakka Academy Nepal</title>
+<link rel="stylesheet" href="style.css"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+<style>
+.reg-header{background:linear-gradient(135deg,var(--navy-dark),var(--navy-mid));padding:100px 0 60px;text-align:center}
+.reg-header h1{font-family:'Playfair Display',serif;color:var(--white);font-size:clamp(2rem,4vw,3rem);margin-bottom:12px}
+.reg-header p{color:rgba(255,255,255,.7);font-size:1rem;max-width:500px;margin:0 auto}
+.reg-body{background:var(--cream);padding:60px 0 80px}
+.reg-grid{display:grid;grid-template-columns:1fr 2fr;gap:40px;align-items:start}
+.reg-sidebar{background:var(--navy-dark);border-radius:var(--radius-lg);padding:32px;color:var(--white);position:sticky;top:90px}
+.reg-sidebar h3{font-family:'Playfair Display',serif;font-size:1.3rem;margin-bottom:20px}
+.reg-benefit{display:flex;gap:14px;margin-bottom:18px;align-items:flex-start}
+.reg-benefit-icon{width:38px;height:38px;background:rgba(232,125,42,.15);border:1px solid rgba(232,125,42,.3);border-radius:10px;display:flex;align-items:center;justify-content:center;color:var(--orange-light);font-size:.9rem;flex-shrink:0}
+.reg-benefit-text strong{display:block;font-size:.9rem;color:var(--white);margin-bottom:3px}
+.reg-benefit-text span{font-size:.8rem;color:rgba(255,255,255,.55)}
+.reg-form-card{background:var(--white);border-radius:var(--radius-lg);padding:40px;box-shadow:var(--shadow-sm)}
+.reg-form-section{margin-bottom:32px;padding-bottom:32px;border-bottom:1px solid var(--border)}
+.reg-form-section:last-child{border:none;margin-bottom:0;padding-bottom:0}
+.reg-section-title{font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--navy);margin-bottom:20px;display:flex;align-items:center;gap:10px}
+.reg-section-title i{color:var(--orange)}
+.form-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.form-group{margin-bottom:16px}
+.form-label{display:block;font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-light);margin-bottom:8px}
+.form-input{width:100%;padding:12px 16px;border:2px solid var(--border);border-radius:var(--radius-sm);font-size:.92rem;color:var(--text-dark);background:var(--cream);outline:none;transition:var(--transition);font-family:'DM Sans',sans-serif}
+.form-input:focus{border-color:var(--orange);background:var(--orange-pale)}
+.checkbox-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.check-item{display:flex;align-items:center;gap:8px;font-size:.85rem;color:var(--text-mid);cursor:pointer;padding:10px;background:var(--cream);border-radius:var(--radius-sm);border:1.5px solid var(--border);transition:var(--transition)}
+.check-item:has(input:checked){background:var(--orange-pale);border-color:var(--orange);color:var(--orange)}
+.check-item input{accent-color:var(--orange)}
+.upload-area{border:2px dashed var(--border);border-radius:var(--radius);padding:32px;text-align:center;cursor:pointer;transition:var(--transition);background:var(--cream)}
+.upload-area:hover{border-color:var(--orange);background:var(--orange-pale)}
+.upload-area i{font-size:2rem;color:var(--border-dark);margin-bottom:12px}
+.upload-area p{font-size:.88rem;color:var(--text-mid)}
+.success-overlay{display:none;position:fixed;inset:0;background:rgba(10,20,40,.85);backdrop-filter:blur(8px);z-index:3000;align-items:center;justify-content:center}
+.success-overlay.show{display:flex}
+.success-box{background:var(--white);border-radius:var(--radius-lg);padding:48px;text-align:center;max-width:480px;width:90%;animation:fadeUp .5s both}
+.success-box i{font-size:3.5rem;color:var(--success);margin-bottom:20px}
+.success-box h2{font-family:'Playfair Display',serif;font-size:1.8rem;color:var(--navy);margin-bottom:12px}
+.success-box p{color:var(--text-mid);margin-bottom:28px}
+@media(max-width:768px){.reg-grid{grid-template-columns:1fr}.reg-sidebar{position:static}.form-grid-2{grid-template-columns:1fr}.checkbox-grid{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+
+<nav class="navbar light" id="navbar">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo"><img src="logo.png" alt="" style="filter:none"/><span class="nav-logo-text" style="color:var(--navy)">EkkaTakka Academy</span></a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html" class="nav-link" style="color:var(--text-mid)">Home</a></li>
+      <li><a href="find-teachers.html" class="nav-link" style="color:var(--text-mid)">Find Teachers</a></li>
+      <li><a href="teacher-register.html" class="nav-link active" style="color:var(--navy);background:var(--orange-pale)">Become a Tutor</a></li>
+    </ul>
+    <div class="nav-actions"><a href="find-teachers.html" class="btn btn-primary btn-sm">Find Teachers</a></div>
+    <button class="hamburger" id="hamburger"><span style="background:var(--navy)"></span><span style="background:var(--navy)"></span><span style="background:var(--navy)"></span></button>
+  </div>
+</nav>
+
+<div class="reg-header">
+  <div class="section-label"><i class="fas fa-chalkboard-teacher"></i> Join Our Network</div>
+  <h1>Become a Verified <span class="accent">Tutor</span></h1>
+  <p>Join 500+ teachers earning from home tuition across Nepal. Free registration, instant access.</p>
+</div>
+
+<div class="reg-body">
+  <div class="container">
+    <div class="reg-grid">
+      <!-- Sidebar -->
+      <div class="reg-sidebar">
+        <h3>Why Join EkkaTakka?</h3>
+        <div class="reg-benefit"><div class="reg-benefit-icon"><i class="fas fa-rupee-sign"></i></div><div class="reg-benefit-text"><strong>Earn More</strong><span>Set your own rates. Avg tutors earn NPR 15,000–40,000/month</span></div></div>
+        <div class="reg-benefit"><div class="reg-benefit-icon"><i class="fas fa-users"></i></div><div class="reg-benefit-text"><strong>100+ New Students Daily</strong><span>We bring students to you — no marketing needed</span></div></div>
+        <div class="reg-benefit"><div class="reg-benefit-icon"><i class="fas fa-shield-alt"></i></div><div class="reg-benefit-text"><strong>Safe & Verified</strong><span>Background check builds trust with parents</span></div></div>
+        <div class="reg-benefit"><div class="reg-benefit-icon"><i class="fas fa-laptop"></i></div><div class="reg-benefit-text"><strong>Home or Online</strong><span>Teach from home or visit students — your choice</span></div></div>
+        <div class="reg-benefit"><div class="reg-benefit-icon"><i class="fas fa-map-marker-alt"></i></div><div class="reg-benefit-text"><strong>All Nepal Coverage</strong><span>Reach students in any district, local level, and ward</span></div></div>
+        <div class="reg-benefit"><div class="reg-benefit-icon"><i class="fas fa-clock"></i></div><div class="reg-benefit-text"><strong>Flexible Schedule</strong><span>Set your own availability — morning, evening, weekends</span></div></div>
+        <div style="margin-top:24px;padding:16px;background:rgba(232,125,42,.1);border-radius:var(--radius-sm);border:1px solid rgba(232,125,42,.2)">
+          <p style="font-size:.82rem;color:rgba(255,255,255,.7);margin-bottom:8px"><i class="fas fa-headset" style="color:var(--orange-light);margin-right:6px"></i>Need help registering?</p>
+          <a href="tel:9763248479" style="color:var(--orange-light);font-weight:700;font-size:.9rem"><i class="fas fa-phone"></i> Call 9763248479</a>
+        </div>
+      </div>
+
+      <!-- Form -->
+      <div class="reg-form-card">
+        <form id="teacherRegForm" onsubmit="submitTeacherReg(event)">
+
+          <div class="reg-form-section">
+            <div class="reg-section-title"><i class="fas fa-user"></i> Personal Information</div>
+            <div class="form-grid-2">
+              <div class="form-group"><label class="form-label">Full Name *</label><input class="form-input" type="text" placeholder="e.g. Sushila Adhikari" required/></div>
+              <div class="form-group"><label class="form-label">Phone / WhatsApp *</label><input class="form-input" type="tel" placeholder="e.g. 9800000000" required/></div>
+              <div class="form-group"><label class="form-label">Email Address</label><input class="form-input" type="email" placeholder="your@email.com"/></div>
+              <div class="form-group"><label class="form-label">Gender *</label><select class="form-input" required><option value="">Select Gender</option><option>Male</option><option>Female</option><option>Other</option></select></div>
+            </div>
+          </div>
+
+          <div class="reg-form-section">
+            <div class="reg-section-title"><i class="fas fa-graduation-cap"></i> Qualification & Experience</div>
+            <div class="form-grid-2">
+              <div class="form-group" style="grid-column:1/-1"><label class="form-label">Highest Qualification *</label><input class="form-input" type="text" placeholder="e.g. M.Ed Mathematics, Tribhuvan University" required/></div>
+              <div class="form-group"><label class="form-label">Years of Experience *</label><select class="form-input" required><option value="">Select</option><option>Less than 1 year</option><option>1–2 years</option><option>3–5 years</option><option>6–10 years</option><option>10+ years</option></select></div>
+              <div class="form-group"><label class="form-label">Languages You Teach In</label><select class="form-input" multiple style="height:80px"><option>Nepali</option><option>English</option><option>Hindi</option><option>Maithili</option><option>Newari</option></select></div>
+            </div>
+          </div>
+
+          <div class="reg-form-section">
+            <div class="reg-section-title"><i class="fas fa-book"></i> Subjects You Teach</div>
+            <div class="checkbox-grid" id="subjectsCheckboxes"></div>
+          </div>
+
+          <div class="reg-form-section">
+            <div class="reg-section-title"><i class="fas fa-layer-group"></i> Grade Levels</div>
+            <div id="gradesCheckboxes" style="display:grid;grid-template-columns:1fr 1fr;gap:10px"></div>
+          </div>
+
+          <div class="reg-form-section">
+            <div class="reg-section-title"><i class="fas fa-home"></i> Teaching Mode</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px">
+              <label class="check-item"><input type="checkbox" value="Home Tuition"/> <i class="fas fa-home"></i> Home Tuition</label>
+              <label class="check-item"><input type="checkbox" value="Online"/> <i class="fas fa-laptop"></i> Online</label>
+              <label class="check-item"><input type="checkbox" value="Both"/> <i class="fas fa-arrows-alt-h"></i> Both</label>
+            </div>
+          </div>
+
+          <div class="reg-form-section">
+            <div class="reg-section-title"><i class="fas fa-map-marker-alt"></i> Your Location & Service Areas</div>
+            <div class="form-grid-2">
+              <div class="form-group"><label class="form-label">Province *</label><select class="form-input" id="reg-province" onchange="regOnProvince()" required><option value="">Select Province</option></select></div>
+              <div class="form-group"><label class="form-label">District *</label><select class="form-input" id="reg-district" onchange="regOnDistrict()" disabled required><option value="">Select District</option></select></div>
+              <div class="form-group"><label class="form-label">Local Level *</label><select class="form-input" id="reg-locallevel" disabled required><option value="">Select Local Level</option></select></div>
+              <div class="form-group"><label class="form-label">Ward Number</label><select class="form-input" id="reg-ward" disabled><option value="">Select Ward</option></select></div>
+              <div class="form-group"><label class="form-label">Travel Radius (km)</label><input class="form-input" type="number" min="0" max="50" placeholder="e.g. 5"/></div>
+              <div class="form-group"><label class="form-label">Full Address</label><input class="form-input" type="text" placeholder="Street/Tole name"/></div>
+            </div>
+          </div>
+
+          <div class="reg-form-section">
+            <div class="reg-section-title"><i class="fas fa-rupee-sign"></i> Pricing</div>
+            <div class="form-grid-2">
+              <div class="form-group"><label class="form-label">Monthly Rate (NPR) *</label><input class="form-input" type="number" placeholder="e.g. 4500" required/></div>
+              <div class="form-group"><label class="form-label">Hourly Rate (NPR)</label><input class="form-input" type="number" placeholder="e.g. 300"/></div>
+            </div>
+          </div>
+
+          <div class="reg-form-section">
+            <div class="reg-section-title"><i class="fas fa-calendar-alt"></i> Availability</div>
+            <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:8px;margin-bottom:16px">
+              <label class="check-item" style="flex-direction:column;text-align:center;padding:12px 6px"><input type="checkbox" value="Sun"/>Sun</label>
+              <label class="check-item" style="flex-direction:column;text-align:center;padding:12px 6px"><input type="checkbox" value="Mon"/>Mon</label>
+              <label class="check-item" style="flex-direction:column;text-align:center;padding:12px 6px"><input type="checkbox" value="Tue"/>Tue</label>
+              <label class="check-item" style="flex-direction:column;text-align:center;padding:12px 6px"><input type="checkbox" value="Wed"/>Wed</label>
+              <label class="check-item" style="flex-direction:column;text-align:center;padding:12px 6px"><input type="checkbox" value="Thu"/>Thu</label>
+              <label class="check-item" style="flex-direction:column;text-align:center;padding:12px 6px"><input type="checkbox" value="Fri"/>Fri</label>
+              <label class="check-item" style="flex-direction:column;text-align:center;padding:12px 6px"><input type="checkbox" value="Sat"/>Sat</label>
+            </div>
+            <div class="form-group"><label class="form-label">Preferred Time Slots</label><select class="form-input" multiple style="height:100px"><option>5:00 AM - 7:00 AM (Early Morning)</option><option>7:00 AM - 9:00 AM (Morning)</option><option>10:00 AM - 12:00 PM (Late Morning)</option><option>2:00 PM - 4:00 PM (Afternoon)</option><option>4:00 PM - 7:00 PM (Evening)</option><option>7:00 PM - 9:00 PM (Night)</option></select></div>
+          </div>
+
+          <div class="reg-form-section">
+            <div class="reg-section-title"><i class="fas fa-align-left"></i> About You</div>
+            <textarea class="form-input" rows="4" placeholder="Describe your teaching style, achievements, specializations, and why students should choose you..."></textarea>
+          </div>
+
+          <div class="reg-form-section">
+            <div class="reg-section-title"><i class="fas fa-file-upload"></i> Upload Documents</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+              <div class="upload-area"><i class="fas fa-id-card"></i><p><strong>Citizenship / ID</strong><br/><span style="font-size:.75rem">JPG, PNG or PDF</span></p></div>
+              <div class="upload-area"><i class="fas fa-certificate"></i><p><strong>Certificate / Degree</strong><br/><span style="font-size:.75rem">JPG, PNG or PDF</span></p></div>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;font-size:1rem;padding:16px">
+            <i class="fas fa-paper-plane"></i> Submit Registration
+          </button>
+          <p style="text-align:center;font-size:.8rem;color:var(--text-light);margin-top:14px">By submitting, you agree to our Terms of Service. We will review your profile within 24–48 hours.</p>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="success-overlay" id="successOverlay">
+  <div class="success-box">
+    <i class="fas fa-check-circle"></i>
+    <h2>Registration Submitted!</h2>
+    <p>Thank you for joining EkkaTakka Academy. Our team will review your profile and contact you within <strong>24–48 hours</strong> to verify your details and activate your profile.</p>
+    <p style="color:var(--orange);font-weight:600;margin-bottom:28px"><i class="fas fa-phone"></i> For faster processing: Call 9763248479</p>
+    <a href="index.html" class="btn btn-primary"><i class="fas fa-home"></i> Back to Home</a>
+  </div>
+</div>
+
+<script src="db.js"></script>
+<script src="app.js"></script>
+<script>
+function submitTeacherReg(e) {
+  e.preventDefault();
+  document.getElementById('successOverlay').classList.add('show');
+}
+document.addEventListener('DOMContentLoaded', () => {
+  // Fill subjects checkboxes
+  const subBox = document.getElementById('subjectsCheckboxes');
+  DB.subjects.slice(1).forEach(s => {
+    subBox.innerHTML += `<label class="check-item"><input type="checkbox" value="${s}"/> ${s}</label>`;
+  });
+  // Fill grade checkboxes
+  const gradeBox = document.getElementById('gradesCheckboxes');
+  DB.grades.forEach(g => {
+    gradeBox.innerHTML += `<label class="check-item"><input type="checkbox" value="${g}"/> ${g}</label>`;
+  });
+  // Fill province selects
+  const regProv = document.getElementById('reg-province');
+  DB.provinces.forEach(p => {
+    regProv.innerHTML += `<option value="${p.id}">${p.name}</option>`;
+  });
+  // Hamburger
+  document.getElementById('hamburger').addEventListener('click', () => {
+    document.getElementById('navLinks').classList.toggle('open');
+  });
+});
+function regOnProvince() {
+  const pid = parseInt(document.getElementById('reg-province').value);
+  const distSel = document.getElementById('reg-district');
+  distSel.innerHTML = '<option value="">Select District</option>';
+  document.getElementById('reg-locallevel').innerHTML = '<option value="">Select Local Level</option>';
+  document.getElementById('reg-ward').innerHTML = '<option value="">Select Ward</option>';
+  if (!pid) { distSel.disabled = true; return; }
+  DB.getDistrictsByProvince(pid).forEach(d => { distSel.innerHTML += `<option value="${d.id}">${d.name}</option>`; });
+  distSel.disabled = false;
+}
+function regOnDistrict() {
+  const did = parseInt(document.getElementById('reg-district').value);
+  const llSel = document.getElementById('reg-locallevel');
+  llSel.innerHTML = '<option value="">Select Local Level</option>';
+  document.getElementById('reg-ward').innerHTML = '<option value="">Select Ward</option>';
+  if (!did) { llSel.disabled = true; return; }
+  const lls = DB.getLocalLevelsByDistrict(did);
+  if (lls.length === 0) {
+    llSel.innerHTML = '<option value="">No local levels listed — contact us</option>';
+  } else {
+    lls.forEach(l => { llSel.innerHTML += `<option value="${l.id}">${l.name} (${l.type})</option>`; });
+  }
+  llSel.disabled = false;
+  const wardSel = document.getElementById('reg-ward');
+  llSel.addEventListener('change', () => {
+    const lid = parseInt(llSel.value);
+    wardSel.innerHTML = '<option value="">Select Ward</option>';
+    if (!lid) { wardSel.disabled = true; return; }
+    DB.getWards(lid).forEach(w => { wardSel.innerHTML += `<option value="${w}">Ward ${w}</option>`; });
+    wardSel.disabled = false;
+  });
+}
+</script>
+</body>
+</html>
